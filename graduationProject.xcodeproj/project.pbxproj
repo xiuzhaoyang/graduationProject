@@ -11,13 +11,19 @@
 		9051105716645210002B72DE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051105616645210002B72DE /* Foundation.framework */; };
 		9051105916645210002B72DE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9051105816645210002B72DE /* CoreGraphics.framework */; };
 		9051105F16645210002B72DE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9051105D16645210002B72DE /* InfoPlist.strings */; };
-		9051106116645210002B72DE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9051106016645210002B72DE /* main.m */; };
 		9051106516645210002B72DE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9051106416645210002B72DE /* AppDelegate.m */; };
-		9051106716645210002B72DE /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9051106616645210002B72DE /* Default.png */; };
-		9051106916645210002B72DE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9051106816645210002B72DE /* Default@2x.png */; };
-		9051106B16645210002B72DE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9051106A16645210002B72DE /* Default-568h@2x.png */; };
-		9051106E16645210002B72DE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9051106D16645210002B72DE /* ViewController.m */; };
 		9051107116645210002B72DE /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9051106F16645210002B72DE /* ViewController.xib */; };
+		909B399116698D2C0016F716 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 909B398B16698D2C0016F716 /* GLView.m */; };
+		909B399516698E4F0016F716 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 909B399416698E4F0016F716 /* ViewController.m */; };
+		909B399C16698E6C0016F716 /* RenderingEngine2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 909B399A16698E6C0016F716 /* RenderingEngine2.cpp */; };
+		909B39A516698F560016F716 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 909B39A216698F560016F716 /* Default-568h@2x.png */; };
+		909B39A616698F560016F716 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 909B39A316698F560016F716 /* Default.png */; };
+		909B39A716698F560016F716 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 909B39A416698F560016F716 /* Default@2x.png */; };
+		909B39A916698F9C0016F716 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 909B39A816698F9C0016F716 /* main.m */; };
+		909B39AB16698FB30016F716 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 909B39AA16698FB30016F716 /* OpenGLES.framework */; };
+		909B39AD16698FCE0016F716 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 909B39AC16698FCE0016F716 /* QuartzCore.framework */; };
+		909B39B0166990A10016F716 /* Simple.frag in Sources */ = {isa = PBXBuildFile; fileRef = 909B39AE166990A10016F716 /* Simple.frag */; };
+		909B39B1166990A10016F716 /* Simple.Vert in Sources */ = {isa = PBXBuildFile; fileRef = 909B39AF166990A10016F716 /* Simple.Vert */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,16 +33,27 @@
 		9051105816645210002B72DE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		9051105C16645210002B72DE /* graduationProject-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "graduationProject-Info.plist"; sourceTree = "<group>"; };
 		9051105E16645210002B72DE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9051106016645210002B72DE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9051106216645210002B72DE /* graduationProject-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "graduationProject-Prefix.pch"; sourceTree = "<group>"; };
 		9051106316645210002B72DE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9051106416645210002B72DE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9051106616645210002B72DE /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		9051106816645210002B72DE /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		9051106A16645210002B72DE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		9051106C16645210002B72DE /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		9051106D16645210002B72DE /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		9051107016645210002B72DE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		909B398A16698D2C0016F716 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLView.h; path = Classes/GLView.h; sourceTree = "<group>"; };
+		909B398B16698D2C0016F716 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLView.m; path = Classes/GLView.m; sourceTree = "<group>"; };
+		909B399316698E4F0016F716 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = Classes/ViewController.h; sourceTree = "<group>"; };
+		909B399416698E4F0016F716 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = Classes/ViewController.m; sourceTree = "<group>"; };
+		909B399716698E6C0016F716 /* IRenderingEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IRenderingEngine.hpp; path = Engine/IRenderingEngine.hpp; sourceTree = "<group>"; };
+		909B399816698E6C0016F716 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Matrix.hpp; path = Engine/Matrix.hpp; sourceTree = "<group>"; };
+		909B399916698E6C0016F716 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Engine/Quaternion.hpp; sourceTree = "<group>"; };
+		909B399A16698E6C0016F716 /* RenderingEngine2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderingEngine2.cpp; path = Engine/RenderingEngine2.cpp; sourceTree = "<group>"; };
+		909B399B16698E6C0016F716 /* Vector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector.hpp; path = Engine/Vector.hpp; sourceTree = "<group>"; };
+		909B39A216698F560016F716 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resource/Default-568h@2x.png"; sourceTree = "<group>"; };
+		909B39A316698F560016F716 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resource/Default.png; sourceTree = "<group>"; };
+		909B39A416698F560016F716 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resource/Default@2x.png"; sourceTree = "<group>"; };
+		909B39A816698F9C0016F716 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Resource/main.m; sourceTree = "<group>"; };
+		909B39AA16698FB30016F716 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		909B39AC16698FCE0016F716 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		909B39AE166990A10016F716 /* Simple.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Simple.frag; path = Shader/Simple.frag; sourceTree = "<group>"; };
+		909B39AF166990A10016F716 /* Simple.Vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Simple.Vert; path = Shader/Simple.Vert; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				909B39AD16698FCE0016F716 /* QuartzCore.framework in Frameworks */,
+				909B39AB16698FB30016F716 /* OpenGLES.framework in Frameworks */,
 				9051105516645210002B72DE /* UIKit.framework in Frameworks */,
 				9051105716645210002B72DE /* Foundation.framework in Frameworks */,
 				9051105916645210002B72DE /* CoreGraphics.framework in Frameworks */,
@@ -56,7 +75,10 @@
 		9051104516645210002B72DE = {
 			isa = PBXGroup;
 			children = (
+				909B39AC16698FCE0016F716 /* QuartzCore.framework */,
+				909B39AA16698FB30016F716 /* OpenGLES.framework */,
 				9051105A16645210002B72DE /* graduationProject */,
+				909B39A116698F2A0016F716 /* Resource */,
 				9051105316645210002B72DE /* Frameworks */,
 				9051105116645210002B72DE /* Products */,
 			);
@@ -83,10 +105,11 @@
 		9051105A16645210002B72DE /* graduationProject */ = {
 			isa = PBXGroup;
 			children = (
+				909B399616698E590016F716 /* Engine */,
+				909B398916698CF10016F716 /* Shader */,
+				909B398816698CDF0016F716 /* Classes */,
 				9051106316645210002B72DE /* AppDelegate.h */,
 				9051106416645210002B72DE /* AppDelegate.m */,
-				9051106C16645210002B72DE /* ViewController.h */,
-				9051106D16645210002B72DE /* ViewController.m */,
 				9051106F16645210002B72DE /* ViewController.xib */,
 				9051105B16645210002B72DE /* Supporting Files */,
 			);
@@ -98,13 +121,53 @@
 			children = (
 				9051105C16645210002B72DE /* graduationProject-Info.plist */,
 				9051105D16645210002B72DE /* InfoPlist.strings */,
-				9051106016645210002B72DE /* main.m */,
 				9051106216645210002B72DE /* graduationProject-Prefix.pch */,
-				9051106616645210002B72DE /* Default.png */,
-				9051106816645210002B72DE /* Default@2x.png */,
-				9051106A16645210002B72DE /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		909B398816698CDF0016F716 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				909B399316698E4F0016F716 /* ViewController.h */,
+				909B399416698E4F0016F716 /* ViewController.m */,
+				909B398A16698D2C0016F716 /* GLView.h */,
+				909B398B16698D2C0016F716 /* GLView.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		909B398916698CF10016F716 /* Shader */ = {
+			isa = PBXGroup;
+			children = (
+				909B39AE166990A10016F716 /* Simple.frag */,
+				909B39AF166990A10016F716 /* Simple.Vert */,
+			);
+			name = Shader;
+			sourceTree = "<group>";
+		};
+		909B399616698E590016F716 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				909B399716698E6C0016F716 /* IRenderingEngine.hpp */,
+				909B399816698E6C0016F716 /* Matrix.hpp */,
+				909B399916698E6C0016F716 /* Quaternion.hpp */,
+				909B399A16698E6C0016F716 /* RenderingEngine2.cpp */,
+				909B399B16698E6C0016F716 /* Vector.hpp */,
+			);
+			name = Engine;
+			sourceTree = "<group>";
+		};
+		909B39A116698F2A0016F716 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				909B39A816698F9C0016F716 /* main.m */,
+				909B39A216698F560016F716 /* Default-568h@2x.png */,
+				909B39A316698F560016F716 /* Default.png */,
+				909B39A416698F560016F716 /* Default@2x.png */,
+			);
+			name = Resource;
+			path = graduationProject;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,10 +222,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9051105F16645210002B72DE /* InfoPlist.strings in Resources */,
-				9051106716645210002B72DE /* Default.png in Resources */,
-				9051106916645210002B72DE /* Default@2x.png in Resources */,
-				9051106B16645210002B72DE /* Default-568h@2x.png in Resources */,
 				9051107116645210002B72DE /* ViewController.xib in Resources */,
+				909B39A516698F560016F716 /* Default-568h@2x.png in Resources */,
+				909B39A616698F560016F716 /* Default.png in Resources */,
+				909B39A716698F560016F716 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,9 +236,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9051106116645210002B72DE /* main.m in Sources */,
 				9051106516645210002B72DE /* AppDelegate.m in Sources */,
-				9051106E16645210002B72DE /* ViewController.m in Sources */,
+				909B399116698D2C0016F716 /* GLView.m in Sources */,
+				909B399516698E4F0016F716 /* ViewController.m in Sources */,
+				909B399C16698E6C0016F716 /* RenderingEngine2.cpp in Sources */,
+				909B39A916698F9C0016F716 /* main.m in Sources */,
+				909B39B0166990A10016F716 /* Simple.frag in Sources */,
+				909B39B1166990A10016F716 /* Simple.Vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,9 +320,12 @@
 		9051107516645210002B72DE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "graduationProject/graduationProject-Prefix.pch";
 				INFOPLIST_FILE = "graduationProject/graduationProject-Info.plist";
+				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -264,9 +334,12 @@
 		9051107616645210002B72DE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "graduationProject/graduationProject-Prefix.pch";
 				INFOPLIST_FILE = "graduationProject/graduationProject-Info.plist";
+				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -291,6 +364,7 @@
 				9051107616645210002B72DE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
