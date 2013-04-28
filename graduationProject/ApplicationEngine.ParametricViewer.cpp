@@ -3,7 +3,6 @@
 
 using namespace std;
 
-namespace ParametricViewer {
 
 static const int SurfaceCount = 6;
 static const int ButtonCount = SurfaceCount - 1;
@@ -218,5 +217,4 @@ int ApplicationEngine::MapToButton(ivec2 touchpoint) const
     return buttonIndex;
 }
 
-}
 

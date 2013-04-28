@@ -9,8 +9,7 @@
 #include "IRenderingEngine.hpp"
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-#include "IRenderingEngine.hpp"
-#include "Quaternion.hpp"
+#include "Interfaces.hpp"
 #include <vector>
 #include <iostream>
 
@@ -21,272 +20,163 @@
 
 using namespace std;
 
-
-static const float AnimationDuration = 0.25f;
-struct Vertex
-{
-    vec3 Position;
-    vec4 Color;
-};
-
-struct Animation
-{
-    Quaternion Start;
-    Quaternion End;
-    Quaternion Current;
-    float Elapsed;
-    float Duration;
+struct Drawable{
+    GLuint VertexBuffer;
+    GLuint IndexBuffer;
+    int IndexCount;
 };
 
 
-class RenderEngine2:public IRenderingEngine
+class RenderingEngine:public IRenderingEngine
 {
 public:
-    RenderEngine2();
-    void Initialize(int Width, int Height);
-    void Render() const;
-    void UpdateAnimation(float timeStep);
-    void OnRotate(DeviceOrientation newOrientation);
+    RenderingEngine();
+    void Initialize(const vector<ISurface*>& surfaces);
+    void Render(const vector<Visual>& visual) const;
 private:
     GLuint BuildShader(const char* source, GLenum shaderType) const;
-    GLint BuildProgram(const char* vShader, const char* fShader) const;
-    vector<Vertex> m_cone;
-    vector<Vertex> m_disk;
-    Animation m_animation;
-    GLuint m_simpleProgram;
-    GLuint m_framebuffer;
+    GLuint BuildProgram(const char* vShader, const char* fShader) const;
+    
+    vector<Drawable> m_drawables;
     GLuint m_colorRenderbuffer;
-    GLuint m_depthRenderbuffer;
+    GLint m_projectionUniform;
+    GLint m_modelviewUniform;
+    GLuint m_positionSlot;
+    GLuint m_colorSlot;
+    mat4 m_translation;
 };
 
 
-struct IRenderingEngine* CreateRender2()
+
+IRenderingEngine* CreateRenderingEngine()
 {
-    return new RenderEngine2();
+    return new RenderingEngine();
 }
 
-RenderEngine2::RenderEngine2()
+RenderingEngine::RenderingEngine()
 {
     glGenRenderbuffers(1, &m_colorRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, m_colorRenderbuffer);
 }
 
-
-void RenderEngine2::Initialize(int Width, int Height)
+void RenderingEngine::Initialize(const vector<ISurface*>& surfaces)
 {
-    const float coneRadius = 0.5f;
-    const float coneHeight = 1.866f;
-    const int coneSlices = 40;
-    {
-        m_cone.resize((coneSlices + 1) * 2);
+    vector<ISurface*>::const_iterator surface;
+    for (surface = surfaces.begin(); surface != surfaces.end(); ++surface) {
         
-        vector<Vertex>::iterator vertex = m_cone.begin();
-        const float dtheta = TwoPi / coneSlices;
-        for (float theta = 0; vertex != m_cone.end(); theta += dtheta)
-        {
-            float brightness = abs(sin(theta));
-            vec4 color(brightness,brightness,brightness,1);
-            
-            vertex->Position = vec3(0,1,0);
-            vertex->Color = color;
-            vertex++;
-            
-            vertex->Position.x = coneRadius * cos(theta);
-            vertex->Position.y = 1 - coneHeight;
-            vertex->Position.z = coneRadius * sin(theta);
-            vertex->Color = color;
-            vertex++;
+        // Create the VBO for the vertices.
+        vector<float> vertices;
+        (*surface)->GenerateVertices(vertices);
+        GLuint vertexBuffer;
+        glGenBuffers(1, &vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER,
+                     vertices.size() * sizeof(vertices[0]),
+                     &vertices[0],
+                     GL_STATIC_DRAW);
+        
+        // Create a new VBO for the indices if needed.
+        int indexCount = (*surface)->GetLineIndexCount();
+        GLuint indexBuffer;
+        if (!m_drawables.empty() && indexCount == m_drawables[0].IndexCount) {
+            indexBuffer = m_drawables[0].IndexBuffer;
+        } else {
+            vector<GLushort> indices(indexCount);
+            (*surface)->GenerateLineIndices(indices);
+            glGenBuffers(1, &indexBuffer);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                         indexCount * sizeof(GLushort),
+                         &indices[0],
+                         GL_STATIC_DRAW);
         }
-    }
-    {
-        m_disk.resize(coneSlices + 2);
         
-        vector<Vertex>::iterator vertex = m_disk.begin();
-        vertex->Color = vec4(0.75,0.75,0.75,1);
-        vertex->Position.x = 0;
-        vertex->Position.y = 1 - coneHeight;
-        vertex->Position.z = 0;
-        vertex++;
-        
-        const float dtheta = TwoPi / coneSlices;
-        for (float theta = 0; vertex != m_disk.end();theta += dtheta)
-        {
-            vertex->Color = vec4(0.75,0.75,0.75,1);
-            vertex->Position.x = coneRadius * cos(theta);
-            vertex->Position.y = 1 - coneHeight;
-            vertex->Position.z = coneRadius * sin(theta);
-            vertex++;
-        }
+        Drawable drawable = { vertexBuffer, indexBuffer, indexCount};
+        m_drawables.push_back(drawable);
     }
     
-    //Create the Depth buffer
-    glGenRenderbuffers(1, &m_depthRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER,
-                          GL_DEPTH_COMPONENT16,
-                          Width, Height);
-    
-    //Create the framebuffer obj; attach the depth and Color buffers.
-    glGenFramebuffers(1, &m_framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-                              GL_COLOR_ATTACHMENT0,
-                              GL_RENDERBUFFER,
-                              m_colorRenderbuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-                              GL_DEPTH_ATTACHMENT,
-                              GL_RENDERBUFFER,
-                              m_depthRenderbuffer);
-    
-    //Bind the color buffer for rendering
+    // Create the framebuffer object.
+    GLuint framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                              GL_RENDERBUFFER, m_colorRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, m_colorRenderbuffer);
     
-   
-    //set up some GL state.
-    glViewport(0, 0, Width, Height);
-    glEnable(GL_DEPTH_TEST);
+    // Create the GLSL program.
+    GLuint simpleProgram = BuildProgram(SimpleVertexShader, SimpleFragmentShader);
+    glUseProgram(simpleProgram);
+    m_positionSlot = glGetAttribLocation(simpleProgram, "Position");
+    m_colorSlot = glGetAttribLocation(simpleProgram, "SourceColor");
+    glEnableVertexAttribArray(m_positionSlot);
     
-    //Build the GLGL program
-    m_simpleProgram = BuildProgram(SimpleVertexShader, SimpleFragmentShader);
-    glUseProgram(m_simpleProgram);
-    
-    //Set the projection matrix.
-    GLuint projectionUniform = glGetUniformLocation(m_simpleProgram, "Projection");
-    mat4 projectionMatrix = mat4::Frustum(-1.6f, 1.6f, -2.4, 2.4, 5, 10);
-    glUniformMatrix4fv(projectionUniform, 1, 0 , projectionMatrix.Pointer());
+    // Set up some matrices.
+    m_translation = mat4::Translate(0, 0, -7);
+    m_projectionUniform = glGetUniformLocation(simpleProgram, "Projection");
+    m_modelviewUniform = glGetUniformLocation(simpleProgram, "Modelview");
 }
 
-
-void RenderEngine2::Render() const
+void RenderingEngine::Render(const vector<Visual>& visuals) const
 {
-    GLuint positionSlot = glGetAttribLocation(m_simpleProgram, "Position");
-    GLuint colorSlot = glGetAttribLocation(m_simpleProgram, "SourceColor");
+    glClearColor(0.5f, 0.5f, 0.5f, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
     
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glEnableVertexAttribArray(positionSlot);
-    glEnableVertexAttribArray(colorSlot);
-    
-    mat4 rotation(m_animation.Current.ToMatrix());
-    mat4 translation = mat4::Translate(0, 0, -7);
-    
-    //Set the model-View matrix.
-    GLint modelviewUniform = glGetUniformLocation(m_simpleProgram, "Modelview");
-    mat4 modelviewMatrix = translation * rotation;
-    glUniformMatrix4fv(modelviewUniform, 1, 0, modelviewMatrix.Pointer());
-    
-    // Draw the cone
-    {
-        GLsizei stride = sizeof(Vertex);
-        const GLvoid* pCoords = &m_cone[0].Position.x;
-        const GLvoid* pColors = &m_cone[0].Color.x;
-        glVertexAttribPointer(positionSlot, 3, GL_FLOAT, GL_FALSE, stride, pCoords);
-        glVertexAttribPointer(colorSlot, 4, GL_FLOAT, GL_FALSE, stride, pColors);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, m_cone.size());
-    }
-    
-    //Draw the disk that caps off the base of the cone
-    {
-        GLsizei stride = sizeof(Vertex);
-        const GLvoid* pCoords = &m_disk[0].Position.x;
-        const GLvoid* pColors = &m_disk[0].Color.x;
-        glVertexAttribPointer(positionSlot, 3, GL_FLOAT, GL_FALSE, stride, pCoords);
-        glVertexAttribPointer(colorSlot, 4, GL_FLOAT, GL_FALSE, stride, pColors);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, m_disk.size());
-    }
-    
-    glDisableVertexAttribArray(positionSlot);
-    glDisableVertexAttribArray(colorSlot);
-    
-
-}
-
-
-void RenderEngine2::UpdateAnimation(float timeStep)
-{
-    if (m_animation.Current == m_animation.End)
-    {
-        return;
-    }
-    
-    m_animation.Elapsed += timeStep;
-    if (m_animation.Elapsed >= AnimationDuration)
-    {
-        m_animation.Current = m_animation.End;
-    }
-    else
-    {
-        float mu = m_animation.Elapsed / AnimationDuration;
-        m_animation.Current = m_animation.Start.Slerp(mu, m_animation.End);
+    vector<Visual>::const_iterator visual = visuals.begin();
+    for (int visualIndex = 0; visual != visuals.end(); ++visual, ++visualIndex) {
+        
+        // Set the viewport transform.
+        ivec2 size = visual->ViewportSize;
+        ivec2 lowerLeft = visual->LowerLeft;
+        glViewport(lowerLeft.x, lowerLeft.y, size.x, size.y);
+        
+        // Set the model-view transform.
+        mat4 rotation = visual->Orientation.ToMatrix();
+        mat4 modelview = rotation * m_translation;
+        glUniformMatrix4fv(m_modelviewUniform, 1, 0, modelview.Pointer());
+        
+        // Set the projection transform.
+        float h = 4.0f * size.y / size.x;
+        mat4 projectionMatrix = mat4::Frustum(-2, 2, -h / 2, h / 2, 5, 10);
+        glUniformMatrix4fv(m_projectionUniform, 1, 0, projectionMatrix.Pointer());
+        
+        // Set the color.
+        vec3 color = visual->Color;
+        glVertexAttrib4f(m_colorSlot, color.x, color.y, color.z, 1);
+        
+        // Draw the wireframe.
+        int stride = sizeof(vec3);
+        const Drawable& drawable = m_drawables[visualIndex];
+        glBindBuffer(GL_ARRAY_BUFFER, drawable.VertexBuffer);
+        glVertexAttribPointer(m_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable.IndexBuffer);
+        glDrawElements(GL_LINES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
     }
 }
 
-
-void RenderEngine2::OnRotate(DeviceOrientation newOrientation)
-{
-    vec3 direction;
-    
-    switch (newOrientation)
-    {
-        case DeviceOrientationUnknow:
-            direction = vec3(0,1,0);
-            break;
-        case DeviceOrientationPortrait:
-            direction = vec3(0,1,0);
-            break;
-        case DeviceOrientationPortraitUpsideDown:
-            direction = vec3(0,-1,0);
-            break;
-        case DeviceOrientationFaceDown:
-            direction = vec3(0,0,-1);
-            break;
-        case  DeviceOrientationFaceUp:
-            direction = vec3(0,0,1);
-            break;
-        case DeviceOrientationLandscapeLeft:
-            direction = vec3(+1,0,0);
-            break;
-        case DeviceOrientationLandscapeRight:
-            direction = vec3(-1,0,0);
-            break;
-            
-        default:
-            break;
-    }
-    
-    m_animation.Elapsed = 0;
-    m_animation.Start = m_animation.Current = m_animation.End;
-    m_animation.End = Quaternion::CreateFromVectors(vec3(0,1,0), direction);
-    
-}
-
-
-GLuint RenderEngine2::BuildShader(const char *source, GLenum shaderType) const
+GLuint RenderingEngine::BuildShader(const char* source, GLenum shaderType) const
 {
     GLuint shaderHandle = glCreateShader(shaderType);
     glShaderSource(shaderHandle, 1, &source, 0);
     glCompileShader(shaderHandle);
     
-    GLint compliSuccess;
-    glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &compliSuccess);
+    GLint compileSuccess;
+    glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &compileSuccess);
     
-    if (compliSuccess == GL_FALSE)
-    {
-        GLchar message[256];
-        glGetShaderInfoLog(shaderHandle, sizeof(message), 0, &message[0]);
-        std::cout << message;
+    if (compileSuccess == GL_FALSE) {
+        GLchar messages[256];
+        glGetShaderInfoLog(shaderHandle, sizeof(messages), 0, &messages[0]);
+        std::cout << messages;
         exit(1);
     }
     
     return shaderHandle;
 }
 
-
-GLint RenderEngine2::BuildProgram(const char *vShader, const char *fShader) const
+GLuint RenderingEngine::BuildProgram(const char* vertexShaderSource,
+                                     const char* fragmentShaderSource) const
 {
-    GLuint vertexShader = BuildShader(vShader, GL_VERTEX_SHADER);
-    GLint fragmentShader = BuildShader(fShader, GL_FRAGMENT_SHADER);
+    GLuint vertexShader = BuildShader(vertexShaderSource, GL_VERTEX_SHADER);
+    GLuint fragmentShader = BuildShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
     
     GLuint programHandle = glCreateProgram();
     glAttachShader(programHandle, vertexShader);
@@ -295,20 +185,12 @@ GLint RenderEngine2::BuildProgram(const char *vShader, const char *fShader) cons
     
     GLint linkSuccess;
     glGetProgramiv(programHandle, GL_LINK_STATUS, &linkSuccess);
-    
-    if (linkSuccess == GL_FALSE)
-    {
-        GLchar message[256];
-        glGetProgramInfoLog(programHandle, sizeof(message), 0, &message[0]);
-        std::cout << message;
+    if (linkSuccess == GL_FALSE) {
+        GLchar messages[256];
+        glGetProgramInfoLog(programHandle, sizeof(messages), 0, &messages[0]);
+        std::cout << messages;
         exit(1);
     }
     
     return programHandle;
 }
-
-
-
-
-
-

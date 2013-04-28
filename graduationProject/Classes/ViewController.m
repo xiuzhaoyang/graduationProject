@@ -18,6 +18,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     GLView *glView = [[GLView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     [self.view addSubview:glView];
 }

@@ -13,6 +13,8 @@
 		9051105F16645210002B72DE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9051105D16645210002B72DE /* InfoPlist.strings */; };
 		9051106516645210002B72DE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9051106416645210002B72DE /* AppDelegate.m */; };
 		9051107116645210002B72DE /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9051106F16645210002B72DE /* ViewController.xib */; };
+		909A8EC8172D481400606047 /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 909A8EC6172D481400606047 /* ParametricSurface.cpp */; };
+		909A8ECB172D546300606047 /* ApplicationEngine.ParametricViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 909A8ECA172D546300606047 /* ApplicationEngine.ParametricViewer.cpp */; };
 		909B399116698D2C0016F716 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 909B398B16698D2C0016F716 /* GLView.m */; };
 		909B399516698E4F0016F716 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 909B399416698E4F0016F716 /* ViewController.m */; };
 		909B399C16698E6C0016F716 /* RenderingEngine2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 909B399A16698E6C0016F716 /* RenderingEngine2.cpp */; };
@@ -37,11 +39,15 @@
 		9051106316645210002B72DE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9051106416645210002B72DE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9051107016645210002B72DE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		909A8EC5172D481400606047 /* ParametricEquations.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ParametricEquations.hpp; sourceTree = "<group>"; };
+		909A8EC6172D481400606047 /* ParametricSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParametricSurface.cpp; sourceTree = "<group>"; };
+		909A8EC7172D481400606047 /* ParametricSurface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ParametricSurface.hpp; sourceTree = "<group>"; };
+		909A8EC9172D497500606047 /* Interfaces.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Interfaces.hpp; sourceTree = "<group>"; };
+		909A8ECA172D546300606047 /* ApplicationEngine.ParametricViewer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationEngine.ParametricViewer.cpp; sourceTree = "<group>"; };
 		909B398A16698D2C0016F716 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLView.h; path = Classes/GLView.h; sourceTree = "<group>"; };
 		909B398B16698D2C0016F716 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLView.m; path = Classes/GLView.m; sourceTree = "<group>"; };
 		909B399316698E4F0016F716 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = Classes/ViewController.h; sourceTree = "<group>"; };
 		909B399416698E4F0016F716 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = Classes/ViewController.m; sourceTree = "<group>"; };
-		909B399716698E6C0016F716 /* IRenderingEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IRenderingEngine.hpp; path = Engine/IRenderingEngine.hpp; sourceTree = "<group>"; };
 		909B399816698E6C0016F716 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Matrix.hpp; path = Engine/Matrix.hpp; sourceTree = "<group>"; };
 		909B399916698E6C0016F716 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quaternion.hpp; path = Engine/Quaternion.hpp; sourceTree = "<group>"; };
 		909B399A16698E6C0016F716 /* RenderingEngine2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderingEngine2.cpp; path = Engine/RenderingEngine2.cpp; sourceTree = "<group>"; };
@@ -129,6 +135,11 @@
 		909B398816698CDF0016F716 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				909A8ECA172D546300606047 /* ApplicationEngine.ParametricViewer.cpp */,
+				909A8EC9172D497500606047 /* Interfaces.hpp */,
+				909A8EC5172D481400606047 /* ParametricEquations.hpp */,
+				909A8EC6172D481400606047 /* ParametricSurface.cpp */,
+				909A8EC7172D481400606047 /* ParametricSurface.hpp */,
 				909B399316698E4F0016F716 /* ViewController.h */,
 				909B399416698E4F0016F716 /* ViewController.m */,
 				909B398A16698D2C0016F716 /* GLView.h */,
@@ -149,7 +160,6 @@
 		909B399616698E590016F716 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				909B399716698E6C0016F716 /* IRenderingEngine.hpp */,
 				909B399816698E6C0016F716 /* Matrix.hpp */,
 				909B399916698E6C0016F716 /* Quaternion.hpp */,
 				909B399A16698E6C0016F716 /* RenderingEngine2.cpp */,
@@ -243,6 +253,8 @@
 				909B39A916698F9C0016F716 /* main.m in Sources */,
 				909B39B0166990A10016F716 /* Simple.frag in Sources */,
 				909B39B1166990A10016F716 /* Simple.Vert in Sources */,
+				909A8EC8172D481400606047 /* ParametricSurface.cpp in Sources */,
+				909A8ECB172D546300606047 /* ApplicationEngine.ParametricViewer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

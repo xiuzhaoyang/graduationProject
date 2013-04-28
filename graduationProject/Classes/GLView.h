@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "IRenderingEngine.hpp"
+#include "Interfaces.hpp"
+
 
 @interface GLView : UIView
 {
 @private
+    IApplicationEngine* m_applicationEngine;
     EAGLContext* m_context;
     IRenderingEngine* m_renderingEngine;
     float m_timestamp;
